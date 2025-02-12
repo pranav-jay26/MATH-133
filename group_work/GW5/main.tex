@@ -1,0 +1,250 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Define Article %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{article}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Using Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{empheq}
+\usepackage{mdframed}
+\usepackage{booktabs}
+\usepackage{lipsum}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{psfrag}
+\usepackage{pgfplots}
+\usepackage{bm}
+\usepackage{float}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Other Settings
+
+\lstset{
+  language=R,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{green!50!black},
+  stringstyle=\color{orange},
+  numbers=left,
+  numberstyle=\tiny,
+  stepnumber=1,
+  numbersep=5pt,
+  backgroundcolor=\color{gray!10},
+  frame=single,
+  breaklines=true,
+  captionpos=b,
+  tabsize=2
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Page Setting %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\geometry{a4paper}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Define some useful colors %%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{ocre}{RGB}{243,102,25}
+\definecolor{mygray}{RGB}{243,243,244}
+\definecolor{deepGreen}{RGB}{26,111,0}
+\definecolor{shallowGreen}{RGB}{235,255,255}
+\definecolor{deepBlue}{RGB}{61,124,222}
+\definecolor{shallowBlue}{RGB}{235,249,255}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%% Define an orangebox command %%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\orangebox[1]{\fcolorbox{ocre}{mygray}{\hspace{1em}#1\hspace{1em}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% English Environments %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtheoremstyle{mytheoremstyle}{3pt}{3pt}{\normalfont}{0cm}{\rmfamily\bfseries}{}{1em}{{\color{black}\thmname{#1}~\thmnumber{#2}}\thmnote{\,--\,#3}}
+\newtheoremstyle{myproblemstyle}{3pt}{3pt}{\normalfont}{0cm}{\rmfamily\bfseries}{}{1em}{{\color{black}\thmname{#1}~\thmnumber{#2}}\thmnote{\,--\,#3}}
+\theoremstyle{mytheoremstyle}
+\newmdtheoremenv[linewidth=1pt,backgroundcolor=shallowGreen,linecolor=deepGreen,leftmargin=0pt,innerleftmargin=20pt,innerrightmargin=20pt,]{theorem}{Theorem}[section]
+\theoremstyle{mytheoremstyle}
+\newmdtheoremenv[linewidth=1pt,backgroundcolor=shallowBlue,linecolor=deepBlue,leftmargin=0pt,innerleftmargin=20pt,innerrightmargin=20pt,]{definition}{Definition}[section]
+\theoremstyle{myproblemstyle}
+\newmdtheoremenv[linecolor=black,leftmargin=0pt,innerleftmargin=10pt,innerrightmargin=10pt,]{problem}{Problem}[section]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Plotting Settings %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepgfplotslibrary{colorbrewer}
+\pgfplotsset{width=8cm,compat=1.9}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Title & Author %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Math 133 - Group Work 5}
+\author{Pranav Jayakumar}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+    \maketitle
+    \begin{abstract}
+      In this assignment we will fit and analyze a linear model to the Carseats data set from the ISLR2 library to predict sales of car seats based on 
+      various factors. 
+    \end{abstract}
+
+    \section{Data Analysis}
+    \vspace{0.25in}
+      \subsection{Fitting the model}
+        We will start by fitting a linear model of the following form:
+        \[
+          \hat{y} = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_3 + \dots + \beta_n x_n + \epsilon
+      \]
+      where:
+      \begin{itemize}
+        \item \(\hat{y}\) is the target (Sales)
+        \item \(\beta_0\) is the intercept coefficient
+        \item \(\beta_n\) is the predictor coefficient
+        \item \(x_n\) is the predictor variable
+        \item \(\epsilon\) is the residual error
+      \end{itemize}
+      \vspace{0.1in}
+      \begin{lstlisting}
+        data <- Carseats
+        sales_lm <- lm(Sales~. data=data)
+        summary(sales_lm)
+      \end{lstlisting}
+      \vspace{0.25in}
+      \subsubsection{Residuals}
+      \begin{table}[H]
+        \centering
+        \begin{tabular}{ccccc}
+        \hline
+        Min & 1Q & Median & 3Q & Max \\ 
+        \hline
+        -2.8692 & -0.6908 & 0.0211 & 0.6636 & 3.4115 \\ 
+        \hline
+        \end{tabular}
+        \caption{Residuals}
+        \label{tab:residuals}
+      \end{table}
+      \subsubsection{Coefficients}
+      \begin{table}[H]
+        \centering
+        \begin{tabular}{lrrrr}
+        \hline
+        & Estimate & Std. Error & t value & Pr($>|t|$) \\ 
+        \hline
+          (Intercept) & 5.6606231 & 0.6034487 & 9.380 & $< 2 \times 10^{-16}$  \\ 
+          CompPrice & 0.0928153 & 0.0041477 & 22.378 & $< 2 \times 10^{-16}$  \\ 
+          Income & 0.0158028 & 0.0018451 & 8.565 & $2.58 \times 10^{-16}$  \\ 
+          Advertising & 0.1230951 & 0.0111237 & 11.066 & $< 2 \times 10^{-16}$  \\ 
+        Population & 0.0002079 & 0.0003705 & 0.561 & 0.575 \\ 
+        Price & -0.0953579 & 0.0026711 & -35.700 & $< 2 \times 10^{-16}$  \\ 
+        ShelveLocGood & 4.8501827 & 0.1531100 & 31.678 & $< 2 \times 10^{-16}$  \\ 
+        ShelveLocMedium & 1.9567148 & 0.1261056 & 15.516 & $< 2 \times 10^{-16}$  \\ 
+        Age & -0.0460452 & 0.0031817 & -14.472 & $< 2 \times 10^{-16}$  \\ 
+        Education & -0.0211018 & 0.0197205 & -1.070 & 0.285 \\ 
+        UrbanYes & 0.1228864 & 0.1129761 & 1.088 & 0.277 \\ 
+        USYes & -0.1840928 & 0.1498423 & -1.229 & 0.220 \\ 
+        \hline
+        \end{tabular}
+        \caption{Coefficients}
+        \label{tab:coefficients_updated}
+      \end{table}      
+      \subsubsection{Model Summary} 
+      \begin{table}[H]
+          \centering
+          \begin{tabular}{lc}
+              \toprule
+              Residual standard error & 1.019 on 388 degrees of freedom\\ 
+              Multiple R-squared & 0.8734\\ 
+              Adjusted R-squared & 0.8698\\ 
+              F-statistic & 243.4 on 11 and 388 DF\\ 
+              p-value & $< 2.2 \times 10^{-16}$ \\ % Added missing `\\`
+              \bottomrule
+          \end{tabular}
+          \caption{Model Summary}
+          \label{tab:model_summary}
+      \end{table}
+      \vspace{0.25in}
+      \subsection{Feature Engineering}
+      
+      We will now drop the insignificant terms and refit the multiple regression model with the new feature space. Our model will still be of the form:
+      \[
+        \hat{y} = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_3 + \dots + \beta_n x_n + \epsilon
+      \]
+      We observe in our previous analysis that the terms Population, Education, Urban, and US are not significant (\(p > 0.1\)). These terms will be dropped from the feature space.
+
+      \begin{lstlisting}
+      sales_lmUpdated <- update(sales_lm, .~. , -Population-Education-Urban-US)
+      summary(sales_lmUpdated)
+      \end{lstlisting}
+      \subsubsection{Residuals}
+      \begin{table}[H]
+          \centering
+          \begin{tabular}{ccccc}
+              \toprule
+              Min & 1Q & Median & 3Q & Max \\
+              \midrule
+              -2.7728 & -0.6954 & 0.0282 & 0.6732 & 3.3292 \\
+              \bottomrule
+          \end{tabular}
+          \caption{Residuals Summary}
+          \label{tab:residuals_updated}
+      \end{table}
+
+      \subsubsection{Coefficients}
+      \begin{table}[H]
+          \centering
+          \begin{tabular}{lcccc}
+              \toprule
+              & Estimate & Std. Error & t value & Pr($>|t|$) \\
+              \midrule
+              (Intercept) & 5.475226 & 0.505005 & 10.84 & $2 \times 10^{-16}$ \\
+              CompPrice & 0.092571 & 0.004123 & 22.45 & $2 \times 10^{-16}$ \\
+              Income & 0.015785 & 0.001838 & 8.59 & $2 \times 10^{-16}$ \\
+              Advertising & 0.115903 & 0.007724 & 15.01 & $2 \times 10^{-16}$ \\
+              Price & -0.095319 & 0.002670 & -35.70 & $2 \times 10^{-16}$ \\
+              ShelveLocGood & 4.835675 & 0.152499 & 31.71 & $2 \times 10^{-16}$ \\
+              ShelveLocMedium & 1.951993 & 0.125375 & 15.57 & $2 \times 10^{-16}$ \\
+              Age & -0.046128 & 0.003177 & -14.52 & $2 \times 10^{-16}$ \\
+              \bottomrule
+          \end{tabular}
+          \caption{Regression Coefficients}
+          \label{tab:coefficients}
+      \end{table}
+
+      \subsubsection{Model Summary}
+      \begin{table}[H]
+          \centering
+          \begin{tabular}{lc}
+              \toprule
+              Residual standard error & 1.019 on 392 degrees of freedom \\
+              Multiple R-squared & 0.872 \\
+              Adjusted R-squared & 0.8697 \\
+              F-statistic & 381.4 on 7 and 392 DF \\
+              p-value & $2 \times 10^{-16}$ \\
+              \bottomrule
+          \end{tabular}
+          \caption{Model Summary}
+          \label{tab:model_summary_updated}
+      \end{table}
+
+      We will now conduct an Analysis of Variance (ANOVA) test to compare the reduced model with the full model.
+      \begin{lstlisting}
+      anova(sales_lmUpdated, sales_lm)
+      \end{lstlisting}
+      \begin{table}[H]
+      \centering
+      \begin{tabular}{lcccccc}
+          \toprule
+          Model & Res.Df & RSS   & Df  & Sum of Sq & F      & Pr($>$F) \\
+          \midrule
+          1     & 392    & 407.39 & -   & -         & -      & -       \\
+          2     & 388    & 402.83 & 4   & 4.5533    & 1.0964 & 0.358   \\
+          \bottomrule
+      \end{tabular}
+      \caption{Analysis of Variance (ANOVA) Table}
+      \label{tab:anova}
+      \end{table}
+      \vspace{0.25in}
+      \subsection{Interpreting Results}
+      We observe the effect of qualitative variable ShelveLoc is both large and significant. 
+      ShelveLoc represents the quality of the location at which the car seat shelf is placed in a store.\\ 
+      \\ 
+      The coefficients for ShelveLocGood and ShelveLocMedium are observed to be approximately 4.8357 and 1.952, respectively. 
+      This indicates good shelf locations and medium shelf locations yield approximately 4,835.7 and 1,952 more sales than bad shelf locations, respectively.
+      \vspace{0.25in}
+\end{document}

@@ -1,0 +1,48 @@
+
+\documentclass{article}
+\usepackage{amsmath, amssymb, graphicx, hyperref}
+\title{Miguel Sort: A Revolutionary $O(n + 2^{32})$ Sorting Algorithm for Maximum Inefficiency}
+\author{Pranav Jayakumar}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+    In this groundbreaking study, we present \textbf{Miguel Sort}, an innovative sorting algorithm that leverages a preallocated boolean array of \( 2^{32} \) elements to efficiently sort five integers in just 15 minutes and 80GB of RAM. This paradigm-shifting approach challenges conventional wisdom by demonstrating that \textit{Big-O notation is merely a suggestion}. We explore Miguel Sort’s applications in memory exhaustion, computational inefficiency, and causing unexpected system crashes in cloud environments.
+\end{abstract}
+
+\section{Introduction}
+Sorting algorithms have long been a cornerstone of computer science, with well-established methods such as QuickSort, MergeSort, and the notoriously sluggish Bubble Sort. However, none of these algorithms truly embrace the full potential of computational inefficiency. This paper introduces Miguel Sort, an algorithm designed with one goal in mind: \textbf{to push the limits of impracticality}.
+
+\section{Algorithm Description}
+Miguel Sort operates using the following steps:
+\begin{enumerate}
+    \item Allocate a boolean array of size \(2^{32}\), requiring approximately 80GB of RAM.
+    \item Iterate through the input array, marking indices in the boolean array as \texttt{True}.
+    \item Iterate through all \(2^{32}\) indices and reconstruct the sorted array.
+    \item Crash the system if memory runs out (this step is unavoidable).
+\end{enumerate}
+
+\section{Time and Space Complexity}
+Miguel Sort achieves an impressive complexity of:
+\begin{itemize}
+    \item \textbf{Time Complexity}: \(O(n + 2^{32})\), ensuring a runtime that scales exponentially worse than any practical sorting method.
+    \item \textbf{Space Complexity}: \(O(2^{32})\), making it ideal for exhausting memory resources.
+\end{itemize}
+
+\section{Experimental Results}
+Empirical tests were conducted on a high-performance Google Colab instance. The results were as follows:
+\begin{itemize}
+    \item Sorting a set of \(\mathbf{5}\) integers: \textbf{15 minutes, 80GB RAM usage}
+    \item Sorting \(10\) integers: \textbf{Colab session forcibly disconnected}
+    \item Sorting negative numbers: \textbf{Immediate segmentation fault}
+\end{itemize}
+
+\section{Conclusion}
+Miguel Sort sets a new standard in computational inefficiency. While traditional algorithms focus on speed and resource optimization, Miguel Sort boldly demonstrates that these concerns are \textit{entirely optional}. We believe this work opens new research avenues in the field of algorithmic absurdity and may inspire future developments in memory-intensive sorting techniques. Future work includes GPU acceleration and a blockchain implementation for maximum impracticality.
+
+\section*{Acknowledgments}
+The authors wish to thank the computer science community for their patience as we push the boundaries of what should never be done.
+
+\end{document}
