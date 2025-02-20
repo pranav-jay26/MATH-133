@@ -1,0 +1,170 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Define Article %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{article}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Using Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{empheq}
+\usepackage{mdframed}
+\usepackage{booktabs}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{psfrag}
+\usepackage{pgfplots}
+\usepackage{bm}
+\usepackage{float}
+\usepackage{listings}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Other Settings
+
+\lstset{
+  language=R,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{green!50!black},
+  stringstyle=\color{orange},
+  numbers=left,
+  numberstyle=\tiny,
+  stepnumber=1,
+  numbersep=5pt,
+  backgroundcolor=\color{gray!10},
+  frame=single,
+  breaklines=true,
+  captionpos=b,
+  tabsize=2
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Page Setting %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\geometry{a4paper}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Define some useful colors %%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{ocre}{RGB}{243,102,25}
+\definecolor{mygray}{RGB}{243,243,244}
+\definecolor{deepGreen}{RGB}{26,111,0}
+\definecolor{shallowGreen}{RGB}{235,255,255}
+\definecolor{deepBlue}{RGB}{61,124,222}
+\definecolor{shallowBlue}{RGB}{235,249,255}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Define an orangebox command %%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\orangebox[1]{\fcolorbox{ocre}{mygray}{\hspace{1em}#1\hspace{1em}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% English Environments %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtheoremstyle{mytheoremstyle}{3pt}{3pt}{\normalfont}{0cm}{\rmfamily\bfseries}{}{1em}{{\color{black}\thmname{#1}~\thmnumber{#2}}\thmnote{\,--\,#3}}
+\newtheoremstyle{myproblemstyle}{3pt}{3pt}{\normalfont}{0cm}{\rmfamily\bfseries}{}{1em}{{\color{black}\thmname{#1}~\thmnumber{#2}}\thmnote{\,--\,#3}}
+\theoremstyle{mytheoremstyle}
+\newmdtheoremenv[linewidth=1pt,backgroundcolor=shallowGreen,linecolor=deepGreen,leftmargin=0pt,innerleftmargin=20pt,innerrightmargin=20pt,]{theorem}{Theorem}[section]
+\theoremstyle{mytheoremstyle}
+\newmdtheoremenv[linewidth=1pt,backgroundcolor=shallowBlue,linecolor=deepBlue,leftmargin=0pt,innerleftmargin=20pt,innerrightmargin=20pt,]{definition}{Definition}[section]
+\theoremstyle{myproblemstyle}
+\newmdtheoremenv[linecolor=black,leftmargin=0pt,innerleftmargin=10pt,innerrightmargin=10pt,]{problem}{Problem}[section]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Plotting Settings %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepgfplotslibrary{colorbrewer}
+\pgfplotsset{width=8cm,compat=1.9}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Title & Author %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Math 133: Statistical Learning Methods - Module 2 Assessment}
+\author{Pranav Jayakumar}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+    \maketitle
+    \section{Exercises}
+    \vspace{0.1in}
+      \subsection{Election Predictions}
+      We will use voter demographic data from the 2016 United States presidential elections to predict whether or not a person voted for Donald Trump.
+      \vspace{0.1in}
+      \subsubsection{Linear Model}
+      We will begin by fitting a linear model of the form:
+      \[\hat{y} = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \epsilon\]
+      Where:
+      \begin{enumerate}
+        \item \(\hat{y}\) is \verb|trump.vote|
+        \item \(\beta\) is the model coefficients
+        \item \(X_1\) is \verb|non.citizen|
+        \item \(X_2\) is \verb|unemployed|
+        \item \(X_3\) is \verb|metro|
+        \item \(\epsilon\) is the residual error
+      \end{enumerate}
+    
+      \begin{lstlisting}
+        data <- read.csv("../../data/election2016.csv")
+        trump_lm <- lm(trump.vote~non.citizen+unemployed+metro, data=data)
+        summary(trump_lm)
+      \end{lstlisting}
+      \vspace{0.1in}
+
+      \begin{table}[H]
+        \caption{Coefficients}\label{tab:coefficients}
+        \vspace{0.05in}
+        \centering
+        \begin{tabular}{ccccc}
+          \toprule
+          Coefficients & Estimate & Std. Error & t-value & Pr($>|t|$) \\ 
+          \midrule
+          (Intercept) & 0.62064 & 0.06793 & 9.136 & \(6.65 \times 10^{-12}\) \\
+          non.citizen & -1.25402 & 0.57049 & -2.198 & 0.0330 \\
+          unemployed & 1.58516 & 1.15351 & 1.374 & 0.1760 \\
+          metro & -0.18211 & 0.10118 & -1.800 & 0.0784 \\
+          \bottomrule
+        \end{tabular}
+      \end{table}
+      \vspace{0.1in}
+      \begin{table}[H]
+        \centering
+        \caption{Model Performance}\label{tab:performance}
+        \vspace{0.05in}
+        \begin{tabular}{cc}
+          \toprule
+          Residual Standard Error & 0.08011 on 46 degrees of freedom \\ 
+          Multiple R-squared & 0.4072 \\ 
+          Adjusted R-squared & 0.3686 \\ 
+          F-statistic & 10.53 on 3 and 46 DF \\ 
+          p-value & \(2.157 \times 10^{-5}\)\\ 
+          \bottomrule
+        \end{tabular}
+      \end{table}
+
+      We observe that only the \verb|non.citizen| variable is significant ($p = 0.0330$).
+      \vspace{0.1in}
+      \subsubsection{Reduced Linear Model}
+      We will now fit a reduced linear model of the form:
+      \[\hat{y} = \beta_0 + \beta_1 X_1 + \epsilon\]
+      Where:
+      \begin{enumerate}
+        \item \(\hat{y}\) remains as \verb|trump.vote|
+        \item \(\beta\) is the model coefficients
+        \item \(X_1\) is \verb|non.citizen|
+        \item \(\epsilon\) remains the residual error
+      \end{enumerate}
+      \vspace{0.1in}
+      \begin{lstlisting}
+      reduced_lm <- update(trump_lm, .~.-unemployed-metro)
+      summary(reduced_lm)
+      \end{lstlisting}
+      \vspace{0.1in}
+      \begin{table}[H]
+        \centering
+        \caption{Reduced Model Coefficients}\label{tab:coeff_reduced}
+        \vspace{0.05in}
+        \begin{tabular}{ccccc}
+          \toprule
+          Coefficients & Estimate & Std. Error & t-value & Pr($>|t|$) \\ % Fixed line
+          \midrule
+          (Intercept) & 0.5979 & 0.0225 & 26.569 & \(< 2 \times 10^{-16}\) \\ 
+          non.citizen & -1.9392 & 0.3783 & -5.126 & \(5.25 \times 10^{-6}\) \\
+          \bottomrule
+        \end{tabular}
+      \end{table}
+      
+ \end{document}
